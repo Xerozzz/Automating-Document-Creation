@@ -3,10 +3,8 @@ from mailmerge import MailMerge
 from datetime import date
 from zipfile import ZipFile
 import csv
-from botocore.exceptions import ClientError
 import logging
 import os
-import boto3
 import yaml
 
 
@@ -15,29 +13,27 @@ def read_yaml(file_path):
         return yaml.safe_load(f)
 
 
-# Read Config Data
-config = read_yaml("config.yml")
-BUCKET = config['BUCKET']
-
 # Create Mailmerge Document
-template = "Test.docx"
+# Change this value if you use another name besides Template.docx
+template = "Template.docx"
 document = MailMerge(template, 'r')
 fields = document.get_merge_fields()
 
 # Open File
+# Change this value if you use another name besides data.csv
 file = open('data.csv', 'r')
+document = MailMerge(template, 'r')
 csvreader = csv.reader(file)
 rows = []
 
 for row in csvreader:
     rows.append(row)
-
 file.close()
 
-# Input data
+# Creation of documents
 count = 1
 for i in rows:
-    document.merge(
+    document.merge(  # CHANGE THE FIELDS HERE ACCORDING TO YOUR CSV DATA AND TEMPLATE MERGEFIELDS
         Name=i[0],
         Index=i[1],
         Phone=i[2],
@@ -47,11 +43,9 @@ for i in rows:
     count += 1
 
 # Create zip package
-zipObj = ZipFile('./data.zip', 'w')
+zipObj = ZipFile('../storage/data.zip', 'w')
 for i in rows:
     filename = f'{i[0]}.docx'
     zipObj.write(filename)
     os.remove(filename)
 zipObj.close()
-
-# Create Boto3 and Upload File
