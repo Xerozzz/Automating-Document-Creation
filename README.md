@@ -1,6 +1,6 @@
 # Automated Document Creation Application
 
-This is a very simple application that accepts information and automatically ingests it into word documents. This can be used for various use cases, like certificates, letters, forms or more.
+This is a very simple application I made for fun that accepts information and automatically ingests it into word documents. This can be used for various use cases, like certificates, letters, forms or more.
 
 ## How To Use
 
